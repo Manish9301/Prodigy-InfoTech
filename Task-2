@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Chronos - Futuristic Stopwatch</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: #0a0a0a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+      animation: bgFloat 20s ease-in-out infinite;
+    }
+
+    @keyframes bgFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(-30px, -30px) rotate(1deg); }
+      66% { transform: translate(30px, 30px) rotate(-1deg); }
+    }
+
+    /* Particle effects */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #00ffff;
+      border-radius: 50%;
+      animation: particleFloat 8s linear infinite;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+        transform: translateY(100vh) scale(1);
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .stopwatch-container {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      padding: 50px;
+      border-radius: 30px;
+      text-align: center;
+      box-shadow: 
+        0 0 50px rgba(0, 255, 255, 0.3),
+        inset 0 0 50px rgba(0, 255, 255, 0.1);
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+      z-index: 10;
+      animation: containerGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes containerGlow {
+      0% { box-shadow: 0 0 50px rgba(0, 255, 255, 0.3), inset 0 0 50px rgba(0, 255, 255, 0.1); }
+      100% { box-shadow: 0 0 80px rgba(0, 255, 255, 0.5), inset 0 0 80px rgba(0, 255, 255, 0.2); }
+    }
+
+    /* Holographic ring */
+    .hologram-ring {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #00ffff, #ff00ff, #ffff00, #00ff00, #00ffff);
+      animation: hologramRotate 8s linear infinite;
+      box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        0 0 60px rgba(255, 0, 255, 0.6),
+        0 0 90px rgba(255, 255, 0, 0.4);
+    }
+
+    .hologram-ring::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: #0a0a0a;
+      box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+
+    @keyframes hologramRotate {
+      0% { transform: translateX(-50%) rotate(0deg); }
+      100% { transform: translateX(-50%) rotate(360deg); }
+    }
+
+    /* Floating icons */
+    .floating-icons {
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      width: 100%;
+      top: -30px;
+      left: 0;
+      padding: 0 30px;
+    }
+
+    .floating-icons span {
+      font-size: 40px;
+      animation: iconFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8));
+    }
+
+    .floating-icons span:nth-child(2) {
+      animation-delay: 1s;
+    }
+
+    .floating-icons span:nth-child(3) {
+      animation-delay: 2s;
+    }
+
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+
+    h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.8rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 50px;
+      margin-bottom: 30px;
+      animation: titleGlow 4s ease-in-out infinite;
+      text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    #display {
+      font-family: 'Orbitron', monospace;
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      background: linear-gradient(135deg, #000, #111);
+      padding: 25px 40px;
+      border-radius: 20px;
+      border: 3px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      color: #00ffff;
+      letter-spacing: 5px;
+      text-shadow: 0 0 20px #00ffff;
+      box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.3),
+        inset 0 0 30px rgba(0, 255, 255, 0.1);
+      animation: displayPulse 2s ease-in-out infinite;
+    }
+
+    #display::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ff00);
+      border-radius: 20px;
+      z-index: -1;
+      animation: borderRotate 3s linear infinite;
+    }
+
+    @keyframes borderRotate {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    @keyframes displayPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    .buttons {
+      margin: 30px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .buttons button {
+      background: linear-gradient(135deg, #00ffff, #0080ff);
+      color: #000;
+      font-family: 'Orbitron', monospace;
+      font-weight: 600;
+      border: none;
+      border-radius: 25px;
+      padding: 15px 25px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 
+        0 5px 20px rgba(0, 255, 255, 0.4),
+        0 0 20px rgba(0, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .buttons button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .buttons button:hover::before {
+      left: 100%;
+    }
+
+    .buttons button:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 
+        0 10px 30px rgba(0, 255, 255, 0.6),
+        0 0 30px rgba(0, 255, 255, 0.4);
+    }
+
+    .buttons button:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* Special button styles */
+    .buttons button:nth-child(1) { background: linear-gradient(135deg, #00ff00, #00cc00); }
+    .buttons button:nth-child(2) { background: linear-gradient(135deg, #ff6600, #ff3300); }
+    .buttons button:nth-child(3) { background: linear-gradient(135deg, #ff0066, #cc0033); }
+    .buttons button:nth-child(4) { background: linear-gradient(135deg, #9900ff, #6600cc); }
+
+    .laps {
+      max-height: 250px;
+      overflow-y: auto;
+      background: rgba(0, 255, 255, 0.05);
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .laps::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .laps::-webkit-scrollbar-track {
+      background: rgba(0, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .laps::-webkit-scrollbar-thumb {
+      background: linear-gradient(45deg, #00ffff, #0080ff);
+      border-radius: 4px;
+    }
+
+    .laps p {
+      margin: 12px 0;
+      font-size: 1.1rem;
+      color: #00ffff;
+      padding: 10px;
+      background: rgba(0, 255, 255, 0.1);
+      border-radius: 8px;
+      border-left: 3px solid #00ffff;
+      animation: lapSlideIn 0.5s ease-out;
+    }
+
+    @keyframes lapSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .stats {
+      margin-top: 30px;
+      text-align: left;
+      font-size: 1.1rem;
+      background: rgba(255, 0, 255, 0.05);
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 0, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .stats p {
+      margin: 10px 0;
+      color: #ff00ff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stats span {
+      color: #ffff00;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .stopwatch-container {
+        padding: 30px 20px;
+        margin: 20px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      #display {
+        font-size: 2.5rem;
+        padding: 20px 25px;
+      }
+      
+      .buttons button {
+        padding: 12px 20px;
+        font-size: 1rem;
+      }
+    }
+
+    /* Loading animation */
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(0, 255, 255, 0.3);
+      border-top: 3px solid #00ffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation"></div>
+  <div class="particles" id="particles"></div>
+  
+  <div class="stopwatch-container">
+    <div class="hologram-ring"></div>
+    <div class="floating-icons">
+      <span>🚀</span>
+      <span>⚡</span>
+      <span>🌟</span>
+    </div>
+    
+    <h1>NEON CHRONOS</h1>
+    <div id="display">00:00:00</div>
+    
+    <div class="buttons">
+      <button onclick="startStopwatch()" id="startBtn">▶ START</button>
+      <button onclick="pauseStopwatch()" id="pauseBtn">⏸ PAUSE</button>
+      <button onclick="resetStopwatch()" id="resetBtn">⏹ RESET</button>
+      <button onclick="recordLap()" id="lapBtn">⏱ LAP</button>
+    </div>
+    
+    <div class="laps" id="laps">
+      <p style="text-align: center; color: rgba(0, 255, 255, 0.6);">No laps recorded yet</p>
+    </div>
+    
+    <div class="stats" id="stats"></div>
+  </div>
+
+  <script>
+    let timer;
+    let isRunning = false;
+    let seconds = 0;
+    let lapsArray = [];
+    let startTime = 0;
+    
+    const display = document.getElementById('display');
+    const laps = document.getElementById('laps');
+    const stats = document.getElementById('stats');
+    const startBtn = document.getElementById('startBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const lapBtn = document.getElementById('lapBtn');
+
+    // Create particle effects
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 8 + 's';
+        particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    function formatTime(sec) {
+      const hrs = Math.floor(sec / 3600);
+      const mins = Math.floor((sec % 3600) / 60);
+      const secs = sec % 60;
+      return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function startStopwatch() {
+      if (!isRunning) {
+        isRunning = true;
+        startTime = Date.now() - (seconds * 1000);
+        
+        timer = setInterval(() => {
+          seconds = Math.floor((Date.now() - startTime) / 1000);
+          display.textContent = formatTime(seconds);
+          
+          // Add visual feedback
+          display.style.textShadow = `0 0 ${20 + (seconds % 2) * 10}px #00ffff`;
+        }, 100);
+        
+        startBtn.style.background = 'linear-gradient(135deg, #ff6600, #ff3300)';
+        startBtn.textContent = '⏸ PAUSE';
+        startBtn.onclick = pauseStopwatch;
+        
+        // Add running animation
+        document.querySelector('.hologram-ring').style.animationDuration = '2s';
+      }
+    }
+
+    function pauseStopwatch() {
+      if (isRunning) {
+        isRunning = false;
+        clearInterval(timer);
+        
+        startBtn.style.background = 'linear-gradient(135deg, #00ff00, #00cc00)';
+        startBtn.textContent = '▶ START';
+        startBtn.onclick = startStopwatch;
+        
+        // Slow down hologram
+        document.querySelector('.hologram-ring').style.animationDuration = '8s';
+      }
+    }
+
+    function resetStopwatch() {
+      clearInterval(timer);
+      isRunning = false;
+      seconds = 0;
+      startTime = 0;
+      
+      display.textContent = '00:00:00';
+      display.style.textShadow = '0 0 20px #00ffff';
+      
+      laps.innerHTML = '<p style="text-align: center; color: rgba(0, 255, 255, 0.6);">No laps recorded yet</p>';
+      stats.innerHTML = '';
+      lapsArray = [];
+      
+      startBtn.style.background = 'linear-gradient(135deg, #00ff00, #00cc00)';
+      startBtn.textContent = '▶ START';
+      startBtn.onclick = startStopwatch;
+      
+      // Reset hologram speed
+      document.querySelector('.hologram-ring').style.animationDuration = '8s';
+      
+      // Add reset animation
+      display.style.transform = 'scale(0.8)';
+      setTimeout(() => {
+        display.style.transform = 'scale(1)';
+      }, 200);
+    }
+
+    function recordLap() {
+      if (isRunning) {
+        lapsArray.push(seconds);
+        const lapTime = formatTime(seconds);
+        const lapElement = document.createElement('p');
+        lapElement.textContent = `Lap ${lapsArray.length}: ${lapTime}`;
+        
+        // Remove "No laps recorded yet" message
+        if (lapsArray.length === 1) {
+          laps.innerHTML = '';
+        }
+        
+        laps.appendChild(lapElement);
+        updateStats();
+        
+        // Add lap animation
+        lapElement.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+          lapElement.style.transform = 'scale(1)';
+        }, 100);
+      }
+    }
+
+    function updateStats() {
+      if (lapsArray.length === 0) return;
+      
+      const min = Math.min(...lapsArray);
+      const max = Math.max(...lapsArray);
+      const avg = lapsArray.reduce((a, b) => a + b) / lapsArray.length;
+      
+      stats.innerHTML = `
+        <p><strong>Fastest Lap:</strong> <span>${formatTime(min)}</span></p>
+        <p><strong>Slowest Lap:</strong> <span>${formatTime(max)}</span></p>
+        <p><strong>Average Time:</strong> <span>${formatTime(Math.floor(avg))}</span></p>
+        <p><strong>Total Laps:</strong> <span>${lapsArray.length}</span></p>
+      `;
+    }
+
+    // Initialize particles and add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+      createParticles();
+      
+      // Add click ripple effect to buttons
+      document.querySelectorAll('.buttons button').forEach(button => {
+        button.addEventListener('click', function(e) {
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+          `;
+          
+          this.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 600);
+        });
+      });
+    });
+
+    // Add ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      switch(e.code) {
+        case 'Space':
+          e.preventDefault();
+          if (isRunning) pauseStopwatch();
+          else startStopwatch();
+          break;
+        case 'KeyR':
+          if (e.ctrlKey) resetStopwatch();
+          break;
+        case 'KeyL':
+          recordLap();
+          break;
+      }
+    });
+  </script>
+</body>
+</html>
