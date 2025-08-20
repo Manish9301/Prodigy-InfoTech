@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portfolio of Manish Chandra – Full Stack Developer (Java, Spring Boot, React, MongoDB)">
+  <meta name="theme-color" content="#0b0f14" />
+  <title>Manish Chandra | Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0b0f14;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --card: #0f172a;
+      --border: rgba(255,255,255,0.08);
+      --primary: #22d3ee; /* cyan */
+      --primary-600: #06b6d4;
+      --accent: #f472b6; /* pink */
+      --shadow-md: 0 10px 30px rgba(0,0,0,0.45);
+      --shadow-sm: 0 4px 14px rgba(0,0,0,0.35);
+      --radius: 14px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background:
+        radial-gradient(900px 400px at 10% -10%, rgba(168,85,247,0.18), transparent 60%),
+        radial-gradient(900px 400px at 90% 0%, rgba(34,211,238,0.18), transparent 60%),
+        linear-gradient(180deg, #0b0f14 0%, #0a0d12 100%);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { color: #7dd3fc; }
+
+    header {
+      padding: 80px 20px 60px;
+      text-align: center;
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(244,114,182,0.16), transparent 60%),
+        radial-gradient(800px 400px at 20% -20%, rgba(34,211,238,0.18), transparent 60%),
+        var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 4px solid #0b0f14;
+      box-shadow:
+        0 0 0 3px rgba(255,255,255,0.08),
+        0 6px 24px rgba(0,0,0,0.5),
+        0 0 40px rgba(168,85,247,0.25);
+      object-fit: cover;
+      margin-bottom: 18px;
+    }
+
+    header h1 { font-size: 2.6rem; color: #f3f4f6; letter-spacing: 0.3px; }
+    header p.lead { max-width: 720px; margin: 12px auto 22px; font-size: 1.1rem; color: var(--muted); }
+
+    .cta {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: #e5e7eb;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, filter .2s ease;
+      font-weight: 500;
+      backdrop-filter: blur(6px);
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); background: rgba(255,255,255,0.06); }
+    .btn-primary {
+      background-image: linear-gradient(135deg, var(--primary), #a78bfa, var(--accent));
+      color: #0b0f14;
+      border-color: transparent;
+    }
+    .btn-primary:hover { filter: brightness(1.05); }
+
+    nav {
+      background: rgba(15, 23, 42, 0.92);
+      -webkit-backdrop-filter: saturate(150%) blur(6px);
+      backdrop-filter: saturate(150%) blur(6px);
+      padding: 14px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(2,6,23,0.2);
+    }
+    nav a {
+      color: #e5e7eb;
+      margin: 0 12px;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      height: 2px; width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      transition: width .25s ease;
+    }
+    nav a:hover { color: #fff; }
+    nav a:hover::after { width: 100%; }
+
+    section {
+      padding: 64px 20px;
+      max-width: 1040px;
+      margin: 40px auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) , var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      color: #f3f4f6;
+      text-align: center;
+      margin-bottom: 28px;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .about p { text-align: center; max-width: 840px; margin: auto; font-size: 1.05rem; color: var(--muted); }
+
+    .skills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 18px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .skills div {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      font-weight: 500;
+      color: #e5e7eb;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .skills div:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: rgba(255,255,255,0.15); }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 8px;
+    }
+    .project {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
+        linear-gradient(90deg, rgba(34,211,238,0.05), rgba(244,114,182,0.05));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .project:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: rgba(255,255,255,0.16); }
+    .project h3 { color: #f3f4f6; margin-bottom: 8px; }
+    .project p { color: var(--muted); }
+
+    .contact { text-align: center; }
+    .contact p { margin-bottom: 10px; color: var(--muted); }
+
+    .footer {
+      background: #06080c;
+      text-align: center;
+      padding: 18px;
+      color: #9ca3af;
+      font-size: 0.92rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .5s ease, transform .5s ease; }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 640px) {
+      header { padding: 60px 16px 44px; }
+      header h1 { font-size: 2rem; }
+      .section-title { font-size: 1.6rem; }
+      section { padding: 44px 16px; margin: 24px 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img class="avatar" src="manish.jpg" alt="Profile Photo of Manish" loading="lazy">
+    <h1>Manish Chandra</h1>
+    <p class="lead">Full Stack Developer • Java • Spring Boot • React • MongoDB</p>
+    <div class="cta" aria-label="Primary actions">
+      <a class="btn btn-primary" href="#projects">View Projects</a>
+      <a class="btn" href="mailto:manishchandrahc@gmail.com">Contact Me</a>
+      <a class="btn" href="https://github.com/Manish9301" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </header>
+
+  <nav>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="about" class="about">
+    <h2 class="section-title">About Me</h2>
+    <p class="reveal">
+      I am a Computer Science Engineering student passionate about crafting reliable and delightful web applications. My focus is on Java, Spring Boot, React, and MongoDB, with a habit of turning complex problems into simple, performant solutions. I value collaboration, clean architecture, and continuous learning.
+    </p>
+  </section>
+
+  <section id="skills" class="reveal">
+    <h2 class="section-title">Skills</h2>
+    <div class="skills">
+      <div>HTML5</div>
+      <div>CSS3</div>
+      <div>JavaScript</div>
+      <div>React.js</div>
+      <div>Java</div>
+      <div>Spring Boot</div>
+      <div>MongoDB</div>
+      <div>Git & GitHub</div>
+    </div>
+  </section>
+
+  <section id="projects" class="reveal">
+    <h2 class="section-title">Projects</h2>
+    <div class="projects">
+      <div class="project">
+        <h3>Restaurant Management System</h3>
+        <p>A full-stack application using Node.js, Express, and MongoDB. Includes role-based admin, book inventory, and author cataloguing with clean REST APIs.</p>
+      </div>
+      <div class="project">
+        <h3>Tic-Tac-Toe Game</h3>
+        <p>Responsive browser game with subtle animations and a JavaScript minimax AI opponent.</p>
+      </div>
+      <div class="project">
+        <h3>Portfolio Website</h3>
+        <p>Responsive portfolio showcasing development skills with semantic HTML, modern CSS, and minimal JavaScript.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact reveal">
+    <h2 class="section-title">Contact</h2>
+    <p>Email: <a href="mailto:manishchandrahc@gmail.com">manishchandrahc@gmail.com</a></p>
+    <p>GitHub: <a href="https://github.com/Manish9301" target="_blank" rel="noopener">github.com/Manish9301</a></p>
+    <p>LinkedIn: <a href="https://www.linkedin.com/in/manish-chandra-1905a42a2/" target="_blank" rel="noopener">linkedin.com/in/manish-chandra</a></p>
+  </section>
+
+  <div class="footer">
+    &copy; 2025 Manish Chandra. All rights reserved.
+  </div>
+  <script>
+    (function() {
+      var observerSupported = 'IntersectionObserver' in window;
+      if (!observerSupported) {
+        document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('show'); });
+        return;
+      }
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){ if (entry.isIntersecting) { entry.target.classList.add('show'); io.unobserve(entry.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
